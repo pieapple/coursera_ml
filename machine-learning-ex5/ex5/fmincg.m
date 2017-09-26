@@ -146,7 +146,7 @@ while i < abs(length)                                      % while not finished
 
   if success                                         % if line search succeeded
     f1 = f2; fX = [fX' f1]';
-    fprintf('%s %4i | Cost: %4.6e\r', S, i, f1);
+    %fprintf('%s %4i | Cost: %4.6e\r', S, i, f1);
     s = (df2'*df2-df1'*df2)/(df1'*df1)*s - df2;      % Polack-Ribiere direction
     tmp = df1; df1 = df2; df2 = tmp;                         % swap derivatives
     d2 = df1'*s;
@@ -168,8 +168,8 @@ while i < abs(length)                                      % while not finished
     z1 = 1/(1-d1);                     
     ls_failed = 1;                                    % this line search failed
   end
-  if exist('OCTAVE_VERSION')
-    fflush(stdout);
-  end
+  %if exist('OCTAVE_VERSION')
+  %  fflush(stdout);
+  %end
 end
-fprintf('\n');
+%fprintf('\n');
