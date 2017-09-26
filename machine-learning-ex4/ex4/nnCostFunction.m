@@ -70,35 +70,19 @@ z3 = a2 * Theta2';
 a3 = sigmoid(z3);
 y_matrix = eye(num_labels)(y,:);
 
-Theta1_strip = Theta1;
-Theta1_strip(:,1) = 0;
-Theta2_strip = Theta2;
-Theta2_strip(:,1) = 0;
+Theta1(:,1) = 0;
+Theta2(:,1) = 0;
 
 J = -1 / m * sum(sum((log(a3) .* y_matrix) + log(1-a3) .* (1-y_matrix))) ...
-    + lambda / (2 * m) * (sum(sum(Theta1_strip.^2)) + sum(sum(Theta2_strip.^2)));
+    + lambda / (2 * m) * (sum(sum(Theta1.^2)) + sum(sum(Theta2.^2)));
 
-Delta_1 = zeros(hidden_layer_size, input_layer_size + 1);
-Delta_2 = zeros(num_labels, hidden_layer_size+1);
-for t = 1:m
-    a_1 = X(t, :);
-    a_1 = [1 a_1];
-    z_2 = a_1 * Theta1';
-    a_2 = sigmoid(z_2);
-    a_2 = [1 a_2];
-    z_3 = a_2 * Theta2';
-    a_3 = sigmoid(z_3);
-    y_t = [1:1:num_labels] == y(t);
-    d_3 = a_3 - y_t;
-    d_2 = (d_3 * Theta2(:,2:hidden_layer_size+1)) .* sigmoidGradient(z_2);
-    Delta_2 += (d_3' * a_2);
-    Delta_1 += (d_2' * a_1);
-end
+d3 = a3 - y_matrix;
+d2 = (d3 * Theta2(:,2:hidden_layer_size+1)) .* sigmoidGradient(z2);
+Delta_1 = d2' * a1;
+Delta_2 = d3' * a2;
 
-Theta1_grad = 1/m * Delta_1 + lambda/m * Theta1_strip;
-Theta2_grad = 1/m * Delta_2 + lambda/m * Theta2_strip;
-
-
+Theta1_grad = 1/m * Delta_1 + lambda/m * Theta1;
+Theta2_grad = 1/m * Delta_2 + lambda/m * Theta2;
 
 
 % -------------------------------------------------------------
